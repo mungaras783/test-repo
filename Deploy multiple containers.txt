@@ -1,0 +1,11 @@
+---
+- name: Installing containers on all Nodes
+  hosts: all
+  tasks:
+   - name: Installing on nodes
+     docker_container:
+      image: nginx
+      name: "mynginx{{item}}"
+      hostname: "myhostnginx{{item}}"
+     with_sequence: count=10
+...

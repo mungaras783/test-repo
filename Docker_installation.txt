@@ -1,0 +1,16 @@
+---
+- name: Installing Docker
+  hosts: all
+  tasks:
+   - name: Installing on all nodes
+     apt:
+      name: python-pip
+      state: present
+      update_cache: yes
+   - name: Docker for all Nodes
+     shell: "{{item}}"
+     with_items:
+      - pip install docker-py
+      - curl -fsSL https://get.docker.com -o get-docker.sh
+      - sh get-docker.sh
+...

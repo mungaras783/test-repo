@@ -1,0 +1,20 @@
+---
+- name: Installing multiple packages with loops
+  hosts: all
+  become: yes
+  vars:
+   - a: tree
+   - b: git
+   - c: apache2
+   - d: absent
+  tasks:
+   - name: Installing tree, git, apache2
+     apt:
+      name: "{{item.a}}"
+      state: "{{item.b}}"
+      update_cache: "{{item.c}}"
+     with_items:
+      - {a: "{{a}}", b: "{{d}}", c: no}
+      - {a: "{{b}}", b: "{{d}}", c: yes}
+      - {a: "{{c}}", b: "{{d}}", c: no}
+...

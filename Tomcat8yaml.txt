@@ -1,0 +1,37 @@
+---
+- name: Installing and configure Tomcat8
+  hosts: all
+  become: yes
+  tasks:
+   - name: Installing Tomacat8 on Nodes
+     apt:
+      name: tomcat8
+      state: present
+      update_cache: yes
+   - name: Changing default port to 9090 from 8080
+     replace:
+      regexp: 8080
+      replace: 9090
+      path: /etc/tomcat8/server.xml
+   - name: service resrting on all Nodes
+     service:
+      name: tomcat8
+      state: restarted
+   - name: copying file from controller to Nodes
+     copy:
+      src: /etc/passwd
+      dest: /tmp
+   - name: checking URL for Node-1
+     uri:
+      url: http://Node-1:9090
+      status_code: 200
+   - name: Checking URL for Node-2 on 8080
+     uri:
+      url: http://Node-2:9090
+      status_code: 200
+   - name: remove tomcat8
+     apt:
+      name: tomcat8
+      state: absent
+
+...

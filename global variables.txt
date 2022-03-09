@@ -1,0 +1,31 @@
+---
+- name: Installing Tomcat8 with Global vars
+  hosts: all
+  become: yes
+  tasks:
+   - name: Installing Tomcat8 on Nodes
+     apt:
+      name: "{{a}}"
+      state: "{{b}}"
+      update_cache: "{{c}}"
+   - name: changing port number
+     replace:
+      regexp: 8080
+      replace: "{{d}}"
+      path: /etc/tomcat8/server.xml
+   - name: restarting reservice on all nodes
+     service:
+      name: "{{a}}"
+      state: restarted
+   - name: checking url for Node-1
+     uri:
+      url: http://Node-1:{{d}}
+      status_code: 200
+   - name: checking url for Node-2
+     uri:
+      url: http://Node-2:{{d}}
+      status_code: 200
+...
+
+
+ansible-playbook ansi-var-book.yml --extra-vars "a=tomcat8 b=present c=no d=9090 "
